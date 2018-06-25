@@ -18,7 +18,8 @@
 > ###### <table><tr><td bgcolor=#7FFFD4>2.取用論文中的參數包含</td></tr></table>
 > ###### 　　開盤價、最高價、最低價、收盤價、成交量、收盤價(調整)、日報酬率(調整)、RSI、ADX、SAR
 > ###### 　　以上參數皆用過去五日來預測當日漲跌，例如:第6天漲跌是透過過去5日之上述全部參數所預測
-> ###### <table><tr><td bgcolor=#7FFFD4>3.採用用論文中的機器學習模型包含LSTM、GRU、XGBoost、SVM</td></tr></table>
+> ###### <table><tr><td bgcolor=#7FFFD4>3.採用用論文中的機器學習模型包含</td></tr></table>
+> ###### 　　LSTM、GRU、XGBoost、SVM
 > ###### <table><tr><td bgcolor=#7FFFD4>4.總結出各預測力與原論文之結果比較</td></tr></table>
 > ###### 　　　＜以下為原論文之預測力＞
 > ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 
