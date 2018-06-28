@@ -2,8 +2,7 @@
 ## Project
 * #### **題目**
 > ###### 檢視SVM、LSTM及XGboost在預測台灣20家公司股價漲跌的表現
-[Stock Trend Prediction: Based on Machine Learning Methods]
-(https://cloudfront.escholarship.org/dist/prd/content/qt0cp1x8th/qt0cp1x8th.pdf?t=p63wi3)
+[Stock Trend Prediction: Based on Machine Learning Methods](https://cloudfront.escholarship.org/dist/prd/content/qt0cp1x8th/qt0cp1x8th.pdf?t=p63wi3)
 ###### -
 * #### **組員**
 > ###### 林羿豪、羅宸旻、林惠雯
