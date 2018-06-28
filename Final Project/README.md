@@ -77,6 +77,116 @@ X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_s
 xgbc.fit(X_train, y_train)
 print('The accuracy of eXtreme Gradient Boosting Classifier on testing set', xgbc.score(X_test, y_test))
 ```
+> ###### LSTM
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from pandas import datetime
+import math, time
+import itertools
+from sklearn import preprocessing
+import datetime
+from operator import itemgetter
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+from keras.models import Sequential
+from keras.layers.core import Dense, Dropout, Activation, Flatten
+from keras.layers.recurrent import LSTM
+import scipy
+```
+```python
+df2330 = df[df.loc[:, "code"] == 2330]
+df2330.loc[:,'RSI'] = talib.RSI(df2330['close'].values.astype('float64'))
+df2330["ADX"] = talib.ADX(df2330['high'].values, df2330['low'].values, df2330['close'].values, timeperiod = 14)
+df2330["SAR"] = talib.SAR(df2330['high'].values, df2330['low'].values, acceleration=0.2)
+
+for i in range(5,0,-1):
+    df2330["open"+str(i)] = df2330["open"].shift(i)
+    df2330["high"+str(i)] = df2330["high"].shift(i)
+    df2330['low'+str(i)] = df2330['low'].shift(i)
+    df2330["close"+str(i)] = df2330["close"].shift(i)
+    df2330["volume"+str(i)] = df2330["volume"].shift(i)
+    df2330["adjclose"+str(i)] = df2330["adjclose"].shift(i)
+    df2330["return"+str(i)] = df2330["return"].shift(i)
+    df2330["RSI"+str(i)] = df2330["RSI"].shift(i)
+    df2330["ADX"+str(i)] = df2330["ADX"].shift(i)
+    df2330["SAR"+str(i)] = df2330["SAR"].shift(i)
+    
+df2330['label'] = (df2330.close - df2330.close.shift(1)) > 0
+```
+```python
+df2330.drop(df.columns[[0,1]], axis=1, inplace=True)
+df2330.head()
+```
+```python
+df2330 = df2330.dropna()
+def load_data(stock, seq_len):
+    amount_of_features = len(stock.columns)
+    data = stock.as_matrix() #pd.DataFrame(stock)
+    sequence_length = seq_len + 1
+    result = []
+    for index in range(len(data) - sequence_length):
+        result.append(data[index: index + sequence_length])
+
+    result = np.array(result)
+    row = round(0.9 * result.shape[0])
+    train = result[:int(row), :]
+    x_train = train[:, :-1]
+    y_train = train[:, -1][:,-1]
+    x_test = result[int(row):, :-1]
+    y_test = result[int(row):, -1][:,-1]
+
+    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], amount_of_features))
+    x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], amount_of_features))  
+
+    return [x_train, y_train, x_test, y_test]
+```
+```python
+def build_model2(layers):
+        d = 0.2
+        model = Sequential()
+        model.add(LSTM(50, input_shape=(layers[1], layers[0]), return_sequences=True))
+        model.add(Dropout(d))
+        model.add(LSTM(80, input_shape=(layers[1], layers[0]), return_sequences=False))
+        model.add(Dropout(d))
+        model.add(Dense(50,activation='relu'))
+        model.add(Dense(1,init='uniform',activation='sigmoid'))
+        model.compile(loss="binary_crossentropy",optimizer='adam',metrics=['accuracy'])
+        return model
+```
+```python
+window = 1
+X_train, y_train, X_test, y_test = load_data(df2330[::-1], window)
+print("X_train", X_train.shape)
+print("y_train", y_train.shape)
+print("X_test", X_test.shape)
+print("y_test", y_test.shape)
+```
+```python
+model = build_model2([61,window,1])
+model.fit(
+    X_train,
+    y_train,
+    batch_size=80,
+    nb_epoch=50,
+    validation_split=0.2,
+    verbose=0)
+score = model.evaluate(X_test,y_test,verbose=2)
+print('The accuracy of eXtreme Gradient Boosting Classifier on testing set:')
+score[1]
+ratio=[]
+p = model.predict_classes(X_test)
+for u in range(len(y_test)):
+    pr = p[u][0]
+    ratio.append((y_test[u]/pr)-1)
+    diff.append(abs(y_test[u]- pr))
+import matplotlib.pyplot as plt2
+plt2.plot(p,color='red', label='prediction')
+plt2.plot(y_test,color='blue', label='real')
+plt2.legend(loc='upper left')
+plt2.show()
+```
 * #### **結論**
 > ###### 從我們的結果來看，LSTM如同論文裡為表現最好的方法，但就三種方法來說，整體表現都不太理想，我們認為可能的原因:
 > ###### 　　(1)不同市場的差異
