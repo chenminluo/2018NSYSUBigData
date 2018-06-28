@@ -23,9 +23,8 @@
 > ###### <table><tr><td bgcolor=#7FFFD4>3.採用用論文中的機器學習模型包含</td></tr></table>
 > ###### 　　LSTM、GRU、XGBoost、SVM
 > ###### <table><tr><td bgcolor=#7FFFD4>4.總結出各預測力與原論文之結果比較</td></tr></table>
-> ###### 　　　＜以下為原論文之預測力＞
-> ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 
-###### -
+> ###### 　　　＜以下為原論文之預測力＞　　　　　　　　　　＜以下為實作台股之預測力＞
+> ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 　　![img](https://i.imgur.com/dhCmKvw.png)
 * #### **Demo**
 > ###### (待完成)
 ###### -
