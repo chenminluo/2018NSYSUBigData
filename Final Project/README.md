@@ -187,6 +187,7 @@ plt2.plot(y_test,color='blue', label='real')
 plt2.legend(loc='upper left')
 plt2.show()
 ```
+![img](blob:https://imgur.com/a2dd93fe-0d96-4e6f-b9ea-24fd89a9d240)
 > ###### SVM
 ```python
 import numpy as np
