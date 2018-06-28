@@ -25,7 +25,7 @@
 > ###### 　　　＜以下為原論文之預測力＞　　　　　　　　　　＜以下為實作台股之預測力＞
 > ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 　　![img](https://i.imgur.com/fObOwiN.png)
 * #### **模型介紹**
-> ###### <XGBoost>
+> ###### *XGBoost*
 > ###### XGBoost的全稱為eXtreme Gradient Boosting，是GBDT的一種高效實現，XGBoost中的基學習器除了可以是CART（gbtree）也可以是線性分類器（gblinear）。
 > ###### 什麼是GBDT？
 > ###### GBDT(Gradient Boosting Decision Tree) 又叫 MART（Multiple Additive Regression Tree)，是一種疊代的決策樹算法，該算法由多棵決策樹組成，所有樹的結論累加起來做最終答案。它在被提出之初就和SVM一起被認為是泛化能力（generalization)較強的算法。GBDT的核心在於，每一棵樹學的是之前所有樹結論和的殘差，這個殘差就是一個加預測值後能得真實值的累加量。與隨機森林不同，隨機森林採用多數投票輸出結果；而GBDT則是將所有結果累加起來，或者加權累加起來。
@@ -46,7 +46,7 @@
 > ###### 　　　在尋找最佳分割點時，考慮傳統的枚舉每個特徵的所有可能分割點的貪心法效率太低，XGBoost實現了一種近似的算法，即：根據百分位法列舉幾個可能成為
 > ###### 　　　分割點的候選者，然後從候選者中根據上面求分割點的公式計算找出最佳的分割點。
 > ###### 　　　特徵列排序後以塊的形式存儲在內存中，在疊代中可以重複使用；雖然boosting算法疊代必須串行，但是在處理每個特徵列時可以做到並行。
-> ###### <LSTM>
+> ###### *LSTM*
 > ###### Long Short Term Memory 網路，通常稱為 LSTMs，是一個特殊的RNN，能夠學習 Long-term 依賴問題。由 Hochreiter 和 Schmidhuber 在 1997年首先提出，近幾年被很多學者優化，並廣泛應用。 在理解LSTM網路的工作原理前，我們先看下標準的RNN是如何工作的，如下圖所示，它首先是結構重複的單元組成，每個單元僅有一層 tanh層組成，將xt和ht-1聯合加權並經過tanh啟用函式輸出到下一個時序，並且每個單元的隱藏狀態Ct 與 ht相等。
 > ###### 　　![img](https://i.imgur.com/jVHOMy7.png)
 * #### **程式碼**
