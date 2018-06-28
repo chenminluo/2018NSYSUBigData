@@ -24,7 +24,7 @@
 > ###### 　　LSTM、GRU、XGBoost、SVM
 > ###### <table><tr><td bgcolor=#7FFFD4>4.總結出各預測力與原論文之結果比較</td></tr></table>
 > ###### 　　　＜以下為原論文之預測力＞　　　　　　　　　　＜以下為實作台股之預測力＞
-> ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 　　![img](https://i.imgur.com/dhCmKvw.png)
+> ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 　　![img](https://i.imgur.com/w5c6wGM.png)
 * #### **結論**
 > ###### 從我們的結果來看，LSTM如同論文裡為表現最好的方法，但就三種方法來說，整體表現都不太理想，我們認為可能的原因:
 > ###### 　　(1)不同市場的差異
