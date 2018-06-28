@@ -187,6 +187,109 @@ plt2.plot(y_test,color='blue', label='real')
 plt2.legend(loc='upper left')
 plt2.show()
 ```
+> ###### SVM
+```python
+import numpy as np
+import pandas as pd
+import talib as ta
+import pandas_datareader as web
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeRegressor
+```
+```python
+stockdata_df = pd.read_csv("stockdata.csv")
+stockdata_df.columns = ['Code', 'Date', 'Open', 'High', 'Low', 'Close' ,'Volume', 'CloseA', 'ReturnA']
+stock2330_df = stockdata_df.query('Code == 2408')
+stock2330_dfstock2330 ['RSI'] = ta.RSI(stock2330_df['Close'].values.astype('float64'), 14)
+stock2330_df['ADX'] = ta.ADX(stock2330_df['High'].values.astype('float64'), stock2330_df['Low'].values.astype('float64'), stock2330_df['Close'].values.astype('float64'), timeperiod = 10 )
+stock2330_df['SAR'] = ta.SAR(stock2330_df['High'].values.astype('float64'), stock2330_df['Low'].values.astype('float64'))
+stock2330_df['label'] = (stock2330_df.Close - stock2330_df.Close.shift(1)) > 0
+```
+```python
+stock2330_df['Open(-1)'] = stock2330_df['Open'].shift(+1)
+stock2330_df['High(-1)'] = stock2330_df['High'].shift(+1)
+stock2330_df['Low(-1)'] = stock2330_df['Low'].shift(+1)
+stock2330_df['Close(-1)'] = stock2330_df['Close'].shift(+1)
+stock2330_df['Volume(-1)'] = stock2330_df['Volume'].shift(+1)
+stock2330_df['CloseA(-1)'] = stock2330_df['CloseA'].shift(+1)
+stock2330_df['ReturnA(-1)'] = stock2330_df['ReturnA'].shift(+1)
+stock2330_df['RSI(-1)'] = stock2330_df['RSI'].shift(+1)
+stock2330_df['ADX(-1)'] = stock2330_df['ADX'].shift(+1)
+stock2330_df['SAR(-1)'] = stock2330_df['SAR'].shift(+1)
+
+stock2330_df['Open(-2)'] = stock2330_df['Open'].shift(+2)
+stock2330_df['High(-2)'] = stock2330_df['High'].shift(+2)
+stock2330_df['Low(-2)'] = stock2330_df['Low'].shift(+2)
+stock2330_df['Close(-2)'] = stock2330_df['Close'].shift(+2)
+stock2330_df['Volume(-2)'] = stock2330_df['Volume'].shift(+2)
+stock2330_df['CloseA(-2)'] = stock2330_df['CloseA'].shift(+2)
+stock2330_df['ReturnA(-2)'] = stock2330_df['ReturnA'].shift(+2)
+stock2330_df['RSI(-2)'] = stock2330_df['RSI'].shift(+2)
+stock2330_df['ADX(-2)'] = stock2330_df['ADX'].shift(+2)
+stock2330_df['SAR(-2)'] = stock2330_df['SAR'].shift(+2)
+
+stock2330_df['Open(-3)'] = stock2330_df['Open'].shift(+3)
+stock2330_df['High(-3)'] = stock2330_df['High'].shift(+3)
+stock2330_df['Low(-3)'] = stock2330_df['Low'].shift(+3)
+stock2330_df['Close(-3)'] = stock2330_df['Close'].shift(+3)
+stock2330_df['Volume(-3)'] = stock2330_df['Volume'].shift(+3)
+stock2330_df['CloseA(-3)'] = stock2330_df['CloseA'].shift(+3)
+stock2330_df['ReturnA(-3)'] = stock2330_df['ReturnA'].shift(+3)
+stock2330_df['RSI(-3)'] = stock2330_df['RSI'].shift(+3)
+stock2330_df['ADX(-3)'] = stock2330_df['ADX'].shift(+3)
+stock2330_df['SAR(-3)'] = stock2330_df['SAR'].shift(+3)
+
+stock2330_df['Open(-4)'] = stock2330_df['Open'].shift(+4)
+stock2330_df['High(-4)'] = stock2330_df['High'].shift(+4)
+stock2330_df['Low(-4)'] = stock2330_df['Low'].shift(+4)
+stock2330_df['Close(-4)'] = stock2330_df['Close'].shift(+4)
+stock2330_df['Volume(-4)'] = stock2330_df['Volume'].shift(+4)
+stock2330_df['CloseA(-4)'] = stock2330_df['CloseA'].shift(+4)
+stock2330_df['ReturnA(-4)'] = stock2330_df['ReturnA'].shift(+4)
+stock2330_df['RSI(-4)'] = stock2330_df['RSI'].shift(+4)
+stock2330_df['ADX(-4)'] = stock2330_df['ADX'].shift(+4)
+stock2330_df['SAR(-4)'] = stock2330_df['SAR'].shift(+4)
+
+stock2330_df['Open(-5)'] = stock2330_df['Open'].shift(+5)
+stock2330_df['High(-5)'] = stock2330_df['High'].shift(+5)
+stock2330_df['Low(-5)'] = stock2330_df['Low'].shift(+5)
+stock2330_df['Close(-5)'] = stock2330_df['Close'].shift(+5)
+stock2330_df['Volume(-5)'] = stock2330_df['Volume'].shift(+5)
+stock2330_df['CloseA(-5)'] = stock2330_df['CloseA'].shift(+5)
+stock2330_df['ReturnA(-5)'] = stock2330_df['ReturnA'].shift(+5)
+stock2330_df['RSI(-5)'] = stock2330_df['RSI'].shift(+5)
+stock2330_df['ADX(-5)'] = stock2330_df['ADX'].shift(+5)
+stock2330_df['SAR(-5)'] = stock2330_df['SAR'].shift(+5)
+```
+```python
+stock2330_df.dropna(inplace=True)
+X_train, X_test, y_train, y_test = train_test_split(stock2330_df[['Open(-1)', 'High(-1)', 'Low(-1)', 'Close(-1)' ,'Volume(-1)', 'CloseA(-1)', 'ReturnA(-1)', 'RSI(-1)', 'ADX(-1)', 'SAR(-1)', 'Open(-2)', 'High(-2)', 'Low(-2)', 'Close(-2)' ,'Volume(-2)', 'CloseA(-2)', 'ReturnA(-2)', 'RSI(-2)', 'ADX(-2)', 'SAR(-2)', 'Open(-3)', 'High(-3)', 'Low(-3)', 'Close(-3)' ,'Volume(-3)', 'CloseA(-3)', 'ReturnA(-3)', 'RSI(-3)', 'ADX(-3)', 'SAR(-3)', 'Open(-4)', 'High(-4)', 'Low(-4)', 'Close(-4)' ,'Volume(-4)', 'CloseA(-4)', 'ReturnA(-4)', 'RSI(-4)', 'ADX(-4)', 'SAR(-4)', 'Open(-5)', 'High(-5)', 'Low(-5)', 'Close(-5)' ,'Volume(-5)', 'CloseA(-5)', 'ReturnA(-5)', 'RSI(-5)', 'ADX(-5)', 'SAR(-5)']], stock2330_df[['label']], test_size=0.3, random_state=0)
+```
+```python
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+sc.fit(X_train)
+X_train_std = sc.transform(X_train)
+X_test_std = sc.transform(X_test)
+from sklearn.svm import SVC
+clf = SVC()
+clf.fit(X_train, y_train)
+survived_predict = clf.predict(X_test)
+from sklearn import model_selection, ensemble, preprocessing, metrics
+accuracy = metrics.accuracy_score(y_test, survived_predict)
+#print(accuracy)
+fpr, tpr, thresholds = metrics.roc_curve(y_test, survived_predict)
+auc = metrics.auc(fpr, tpr)
+#print(auc)
+print('準確率: {}'.format(auc))
+print('AUC值: {}'.format(accuracy))
+```
 * #### **結論**
 > ###### 從我們的結果來看，LSTM如同論文裡為表現最好的方法，但就三種方法來說，整體表現都不太理想，我們認為可能的原因:
 > ###### 　　(1)不同市場的差異
