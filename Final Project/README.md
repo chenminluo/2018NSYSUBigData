@@ -25,8 +25,57 @@
 > ###### 　　　＜以下為原論文之預測力＞　　　　　　　　　　＜以下為實作台股之預測力＞
 > ###### 　　![img](https://i.imgur.com/YVPFhYT.png) 　　![img](https://i.imgur.com/fObOwiN.png)
 * #### **程式碼**
+> ###### XGBoost
 ```python
-
+importimport  osos
+mingw_pathmingw_pat  = 'C:\\Program Files\\mingw-w64\\x86_64-7.3.0-posix-seh-rt_v5-rev0\\mingw64\\bin'
+os.environ['PATH'] = mingw_path + ';' + os.environ['PATH']
+```
+```python
+import xgboost as xgb
+import pandas as pd
+import numpy as np
+from datetime import datetime
+import talib
+```
+```python
+df = pd.read_csv("stockdata.csv",encoding = 'big5')
+df.columns=['code','date','open','high','low','close','volume',"adjclose", "return"]
+df["return"] = df["return"]/100
+df['date'] = pd.to_datetime(df['date'], format='%Y/%m/%d').dt.strftime("%Y-%m-%d");
+df2330 = df[df.loc[:, "code"] == 2330]
+df2330.loc[:,'RSI'] = talib.RSI(df2330['close'].values.astype('float64'))
+df2330["ADX"] = talib.ADX(df2330['high'].values, df2330['low'].values, df2330['close'].values, timeperiod = 14)
+df2330["SAR"] = talib.SAR(df2330['high'].values, df2330['low'].values, acceleration=0.2)
+```python
+for i in range(5,0,-1):
+    df2330["open"+str(i)] = df2330["open"].shift(i)
+    df2330["high"+str(i)] = df2330["high"].shift(i)
+    df2330['low'+str(i)] = df2330['low'].shift(i)
+    df2330["close"+str(i)] = df2330["close"].shift(i)
+    df2330["volume"+str(i)] = df2330["volume"].shift(i)
+    df2330["adjclose"+str(i)] = df2330["adjclose"].shift(i)
+    df2330["return"+str(i)] = df2330["return"].shift(i)
+    df2330["RSI"+str(i)] = df2330["RSI"].shift(i)
+    df2330["ADX"+str(i)] = df2330["ADX"].shift(i)
+    df2330["SAR"+str(i)] = df2330["SAR"].shift(i)
+```
+```python
+df2330.head()
+df2330 = df2330.dropna()
+from sklearn import model_selection, ensemble, preprocessing, metrics
+from xgboost import XGBClassifier
+xgbc = XGBClassifier()
+df2330['label'] = (df2330.close - df2330.close.shift(1)) > 0
+X = df2330[['open1', 'high1', 'low1', 'close1', 'volume1', "RSI1", "ADX1", "SAR1", "adjclose1", "return1",
+               'open2', 'high2', 'low2', 'close2', 'volume2', "RSI2", "ADX2", "SAR2", "adjclose2", "return2",
+               'open3', 'high3', 'low3', 'close3', 'volume3', "RSI3", "ADX3", "SAR3", "adjclose3", "return3",
+               'open4', 'high4', 'low4', 'close4', 'volume4', "RSI4", "ADX4", "SAR4", "adjclose4", "return4",
+               'open5', 'high5', 'low5', 'close5', 'volume5', "RSI5", "ADX5", "SAR5", "adjclose5", "return5"]]
+y = df2330['label']
+X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
+xgbc.fit(X_train, y_train)
+print('The accuracy of eXtreme Gradient Boosting Classifier on testing set', xgbc.score(X_test, y_test))
 ```
 * #### **結論**
 > ###### 從我們的結果來看，LSTM如同論文裡為表現最好的方法，但就三種方法來說，整體表現都不太理想，我們認為可能的原因:
