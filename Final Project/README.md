@@ -39,6 +39,7 @@ from datetime import datetime
 import talib
 ```
 ```python
+讀資料、加變數
 df = pd.read_csv("stockdata.csv",encoding = 'big5')
 df.columns=['code','date','open','high','low','close','volume',"adjclose", "return"]
 df["return"] = df["return"]/100
@@ -48,6 +49,7 @@ df2330.loc[:,'RSI'] = talib.RSI(df2330['close'].values.astype('float64'))
 df2330["ADX"] = talib.ADX(df2330['high'].values, df2330['low'].values, df2330['close'].values, timeperiod = 14)
 df2330["SAR"] = talib.SAR(df2330['high'].values, df2330['low'].values, acceleration=0.2)
 ```python
+加入變數
 for i in range(5,0,-1):
     df2330["open"+str(i)] = df2330["open"].shift(i)
     df2330["high"+str(i)] = df2330["high"].shift(i)
@@ -118,9 +120,10 @@ df2330['label'] = (df2330.close - df2330.close.shift(1)) > 0
 ```python
 df2330.drop(df.columns[[0,1]], axis=1, inplace=True)
 df2330.head()
+df2330 = df2330.dropna()
 ```
 ```python
-df2330 = df2330.dropna()
+讀資料
 def load_data(stock, seq_len):
     amount_of_features = len(stock.columns)
     data = stock.as_matrix() #pd.DataFrame(stock)
@@ -143,6 +146,7 @@ def load_data(stock, seq_len):
     return [x_train, y_train, x_test, y_test]
 ```
 ```python
+建立LSTM
 def build_model2(layers):
         d = 0.2
         model = Sequential()
@@ -206,7 +210,7 @@ from sklearn.tree import DecisionTreeRegressor
 ```python
 stockdata_df = pd.read_csv("stockdata.csv")
 stockdata_df.columns = ['Code', 'Date', 'Open', 'High', 'Low', 'Close' ,'Volume', 'CloseA', 'ReturnA']
-stock2330_df = stockdata_df.query('Code == 2408')
+stock2330_df = stockdata_df.query('Code == 2')
 stock2330_dfstock2330 ['RSI'] = ta.RSI(stock2330_df['Close'].values.astype('float64'), 14)
 stock2330_df['ADX'] = ta.ADX(stock2330_df['High'].values.astype('float64'), stock2330_df['Low'].values.astype('float64'), stock2330_df['Close'].values.astype('float64'), timeperiod = 10 )
 stock2330_df['SAR'] = ta.SAR(stock2330_df['High'].values.astype('float64'), stock2330_df['Low'].values.astype('float64'))
